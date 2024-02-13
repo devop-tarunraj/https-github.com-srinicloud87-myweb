@@ -1,9 +1,5 @@
 pipeline{
     agent any
-    
-    environment{
-        PATH = "/opt/maven3/bin:$PATH"
-    }
     stages{
         stage("Git Checkout"){
             steps{
@@ -20,13 +16,13 @@ pipeline{
             steps{
                sshagent(['tomcat-tarun']) { 
                 sh """
-                    scp -o StrictHostKeyChecking=no target/myweb.war  ubuntu@172.31.46.126:/home/ubuntu/apache-tomcat-9.0.68/webapps/
+                    scp -o StrictHostKeyChecking=no target/myweb.war  ubuntu@172.31.46.126:/home/ubuntu/apache-tomcat-9.0.85/webapps/
+        
+                    ssh ubuntu@172.31.46.126 /home/ubuntu/apache-tomcat-9.0.85/bin/shutdown.sh
                     
-                    ssh ubuntu@172.31.46.126 /home/ubuntu/apache-tomcat-9.0.68/bin/shutdown.sh
-                    
-                    ssh ubuntu@172.31.46.126 /home/ubuntu/apache-tomcat-9.0.68/bin/startup.sh
+                    ssh ubuntu@172.31.46.126 /home/ubuntu/apache-tomcat-9.0.85/bin/startup.sh
                 
-                """
+                  """
             }
             
             }
