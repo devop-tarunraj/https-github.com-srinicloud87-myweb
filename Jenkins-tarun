@@ -8,24 +8,8 @@ pipeline{
         }
         stage("Maven Build"){
             steps{
-                sh "mvn clean package"
-                sh "mv target/*.war target/myweb.war"
+                sh "mvn clean sonar:sonar package"
             }
         }
-        stage("deploy-dev"){
-            steps{
-               sshagent(['tomcat-tarun']) { 
-                sh """
-                    scp -o StrictHostKeyChecking=no target/myweb.war  ubuntu@172.31.46.126:/home/ubuntu/apache-tomcat-9.0.85/webapps/
-        
-                    ssh ubuntu@172.31.46.126 /home/ubuntu/apache-tomcat-9.0.85/bin/shutdown.sh
-                    
-                    ssh ubuntu@172.31.46.126 /home/ubuntu/apache-tomcat-9.0.85/bin/startup.sh
-                
-                  """
-            }
-            
-            }
-        }
-    }
+       }
 }
